@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | Admin Panel</title>
+    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    
+    <%- style %>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="bg-gray-800 text-white w-64 py-6 flex-shrink-0">
+            <div class="px-6">
+                <a href="/admin/dashboard" class="text-2xl font-semibold">Admin Panel</a>
+            </div>
+            <nav class="mt-8 px-4">
+                <a href="/admin/dashboard" class="block py-2.5 px-4 rounded transition duration-200 <%= path === '/admin/dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-700' %>">
+                    <i class="fas fa-chart-line mr-2"></i>Dashboard
+                </a>
+                <a href="/admin/flights" class="block py-2.5 px-4 rounded transition duration-200 <%= path.startsWith('/admin/flights') ? 'bg-gray-900 text-white' : 'hover:bg-gray-700' %>">
+                    <i class="fas fa-plane mr-2"></i>Flights
+                </a>
+                <a href="/admin/bookings" class="block py-2.5 px-4 rounded transition duration-200 <%= path === '/admin/bookings' ? 'bg-gray-900 text-white' : 'hover:bg-gray-700' %>">
+                    <i class="fas fa-ticket-alt mr-2"></i>Bookings
+                </a>
+                <a href="/admin/users" class="block py-2.5 px-4 rounded transition duration-200 <%= path === '/admin/users' ? 'bg-gray-900 text-white' : 'hover:bg-gray-700' %>">
+                    <i class="fas fa-users mr-2"></i>Users
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <button class="text-gray-500 focus:outline-none md:hidden">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="relative">
+                            <button class="flex items-center space-x-2 text-gray-700 focus:outline-none">
+                                <img class="h-8 w-8 rounded-full" src="<%= user.avatar || '/images/default-avatar.png' %>" alt="Avatar">
+                                <span><%= user.name %></span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto">
+                <%- body %>
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50"></div>
+
+    <!-- Toast Script -->
+    <script>
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        
+        const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+        toast.className = `${bgColor} text-white px-6 py-4 rounded-lg shadow-lg mb-4 transition-opacity duration-300`;
+        toast.textContent = message;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => container.removeChild(toast), 300);
+        }, 3000);
+    }
+    </script>
+
+    <%- script %>
+</body>
+</html>

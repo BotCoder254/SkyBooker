@@ -1,0 +1,228 @@
+<%- include('../partials/admin-header') %>
+
+<div class="flex-1">
+    <!-- Main Content -->
+    <div class="flex-1 overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                        Welcome Back, Admin!
+                    </h2>
+                    <div class="flex items-center space-x-4">
+                        <a href="/admin/flights" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            <i class="fas fa-plus mr-2"></i>
+                            Add New Flight
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Total Revenue -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                <i class="fas fa-dollar-sign text-white text-2xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
+                                    <dd class="text-2xl font-semibold text-gray-900">$<%= stats.revenue.totalRevenue.toLocaleString() %></dd>
+                                    <dd class="text-sm text-gray-500">Avg. $<%= Math.round(stats.revenue.averageBookingValue).toLocaleString() %> per booking</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Bookings -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                <i class="fas fa-ticket-alt text-white text-2xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Bookings</dt>
+                                    <dd class="text-2xl font-semibold text-gray-900"><%= stats.bookings.totalBookings.toLocaleString() %></dd>
+                                    <dd class="text-sm text-gray-500"><%= stats.bookings.confirmedBookings.toLocaleString() %> confirmed</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Flights -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                                <i class="fas fa-plane text-white text-2xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Active Flights</dt>
+                                    <dd class="text-2xl font-semibold text-gray-900"><%= stats.flights.activeFlights.toLocaleString() %></dd>
+                                    <dd class="text-sm text-gray-500">Out of <%= stats.flights.totalFlights.toLocaleString() %> total</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Users -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                <i class="fas fa-users text-white text-2xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                                    <dd class="text-2xl font-semibold text-gray-900"><%= stats.users.totalUsers.toLocaleString() %></dd>
+                                    <dd class="text-sm text-gray-500"><%= stats.users.activeUsers.toLocaleString() %> active</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Revenue Chart -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Revenue Overview</h3>
+                    <div id="revenueChart" class="h-80"></div>
+                </div>
+
+                <!-- Bookings Chart -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Booking Trends</h3>
+                    <div id="bookingsChart" class="h-80"></div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="mt-8">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4">
+                        <div class="flow-root">
+                            <ul class="-mb-8">
+                                <li>
+                                    <div class="relative pb-8">
+                                        <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></span>
+                                        <div class="relative flex space-x-3">
+                                            <div>
+                                                <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                                    <i class="fas fa-ticket-alt text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                <div>
+                                                    <p class="text-sm text-gray-500">New booking <span class="font-medium text-gray-900">#12345</span> by John Doe</p>
+                                                </div>
+                                                <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                                    <time>2 hours ago</time>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- Add more activity items as needed -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    // Revenue Chart
+    var revenueOptions = {
+        chart: {
+            type: 'area',
+            height: 320,
+            toolbar: { show: false },
+            fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+        },
+        series: [{
+            name: 'Revenue',
+            data: [30000, 40000, 35000, 50000, 49000, 60000, 70000]
+        }],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+        },
+        colors: ['#EF4444'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.3,
+                stops: [0, 90, 100]
+            }
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2
+        },
+        tooltip: {
+            theme: 'light',
+            y: {
+                formatter: function(value) {
+                    return '$' + value.toLocaleString();
+                }
+            }
+        }
+    };
+
+    var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
+    revenueChart.render();
+
+    // Bookings Chart
+    var bookingsOptions = {
+        chart: {
+            type: 'bar',
+            height: 320,
+            toolbar: { show: false },
+            fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+        },
+        series: [{
+            name: 'Bookings',
+            data: [44, 55, 57, 56, 61, 58, 63]
+        }],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+        },
+        colors: ['#EF4444'],
+        plotOptions: {
+            bar: {
+                borderRadius: 4,
+                columnWidth: '60%'
+            }
+        },
+        tooltip: {
+            theme: 'light'
+        }
+    };
+
+    var bookingsChart = new ApexCharts(document.querySelector("#bookingsChart"), bookingsOptions);
+    bookingsChart.render();
+</script>

@@ -1,0 +1,415 @@
+<!-- Booking Page -->
+<div class="flex h-screen bg-gray-100">
+    <!-- Sidebar (Same as dashboard) -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-gray-800">
+            <!-- Sidebar Header -->
+            <div class="flex items-center justify-center h-16 px-4 bg-gray-900">
+                <h2 class="text-lg font-bold text-white">Flight Dashboard</h2>
+            </div>
+            
+            <!-- Sidebar Navigation -->
+            <div class="flex flex-col flex-1 overflow-y-auto">
+                <nav class="flex-1 px-2 py-4 space-y-1">
+                    <a href="/dashboard" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-home mr-3"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/flights" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-plane mr-3"></i>
+                        <span>Flights</span>
+                    </a>
+                    <a href="/bookings" class="flex items-center px-4 py-3 text-white bg-gray-700 rounded-md">
+                        <i class="fas fa-ticket-alt mr-3"></i>
+                        <span>My Bookings</span>
+                    </a>
+                    <a href="/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-user mr-3"></i>
+                        <span>Profile</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="flex items-center justify-between px-6 py-4 bg-white border-b">
+            <div class="flex items-center">
+                <button class="text-gray-500 focus:outline-none md:hidden">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 class="text-xl font-semibold text-gray-800 ml-4">Book Flight</h2>
+            </div>
+        </header>
+
+        <!-- Booking Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-100">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <!-- Flight Details -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Flight Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <span class="text-sm text-gray-500">Flight Number</span>
+                            <p class="text-lg font-semibold" id="flightNumber"></p>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-500">From - To</span>
+                            <p class="text-lg font-semibold" id="route"></p>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-500">Date & Time</span>
+                            <p class="text-lg font-semibold" id="datetime"></p>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-500">Price per Person</span>
+                            <p class="text-lg font-semibold text-red-500" id="price"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passenger Details Form -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Passenger Details</h3>
+                    <form id="passengerForm" class="space-y-6">
+                        <div id="passengerFields">
+                            <!-- Passenger fields will be dynamically added here -->
+                        </div>
+                        <button type="button" 
+                                onclick="addPassenger()"
+                                class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded-md hover:bg-red-50">
+                            Add Passenger
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Seat Selection -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Select Seats</h3>
+                    <div class="grid grid-cols-6 gap-2" id="seatMap">
+                        <!-- Seats will be dynamically added here -->
+                    </div>
+                    <div class="mt-4 flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-gray-200 rounded mr-2"></div>
+                            <span>Available</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-red-500 rounded mr-2"></div>
+                            <span>Selected</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-gray-400 rounded mr-2"></div>
+                            <span>Occupied</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Section -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Payment Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="mb-4">
+                                <span class="text-sm text-gray-500">Total Amount</span>
+                                <p class="text-2xl font-bold text-red-500" id="totalAmount">KES 0.00</p>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">M-Pesa Phone Number</label>
+                                    <input type="tel" 
+                                           id="phoneNumber" 
+                                           placeholder="254700000000"
+                                           class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200">
+                                </div>
+                                <button onclick="initiatePayment()" 
+                                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Pay with M-Pesa
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <img src="/images/mpesa-logo.png" alt="M-Pesa" class="h-16">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Payment Status Modal -->
+<div id="paymentModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <i class="fas fa-spinner fa-spin text-green-600"></i>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Processing Payment</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500">
+                    Please check your phone and enter M-Pesa PIN to complete the payment.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedSeats = [];
+let flightData = null;
+let bookingId = null;
+
+// Initialize booking page
+async function initBooking() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const flightId = urlParams.get('flightId');
+    
+    try {
+        const response = await fetch(`/api/flights/${flightId}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            flightData = data.data.flight;
+            displayFlightDetails();
+            initializeSeatMap();
+            addPassenger(); // Add first passenger form
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error loading flight details');
+    }
+}
+
+// Display flight details
+function displayFlightDetails() {
+    document.getElementById('flightNumber').textContent = flightData.flightNumber;
+    document.getElementById('route').textContent = `${flightData.departureCity} - ${flightData.arrivalCity}`;
+    document.getElementById('datetime').textContent = new Date(flightData.departureTime).toLocaleString();
+    document.getElementById('price').textContent = `KES ${flightData.price.toLocaleString()}`;
+}
+
+// Add passenger form fields
+function addPassenger() {
+    const container = document.getElementById('passengerFields');
+    const passengerIndex = container.children.length;
+    
+    const passengerHtml = `
+        <div class="passenger-form border-b pb-6 mb-6">
+            <h4 class="text-md font-medium text-gray-700 mb-4">Passenger ${passengerIndex + 1}</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" 
+                           name="firstName_${passengerIndex}" 
+                           required 
+                           class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" 
+                           name="lastName_${passengerIndex}" 
+                           required 
+                           class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" 
+                           name="email_${passengerIndex}" 
+                           required 
+                           class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input type="tel" 
+                           name="phone_${passengerIndex}" 
+                           required 
+                           class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Passport Number</label>
+                    <input type="text" 
+                           name="passport_${passengerIndex}" 
+                           required 
+                           class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200">
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', passengerHtml);
+    updateTotalAmount();
+}
+
+// Initialize seat map
+function initializeSeatMap() {
+    const seatMap = document.getElementById('seatMap');
+    const totalSeats = 180; // 30 rows x 6 seats
+    
+    for (let i = 0; i < totalSeats; i++) {
+        const seatNumber = `${String.fromCharCode(65 + Math.floor(i / 6))}${(i % 6) + 1}`;
+        const isOccupied = Math.random() < 0.3; // 30% seats are occupied (for demo)
+        
+        const seatHtml = `
+            <button onclick="toggleSeat('${seatNumber}')"
+                    id="seat_${seatNumber}"
+                    class="w-10 h-10 rounded-md ${isOccupied ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-200 hover:bg-red-100'}"
+                    ${isOccupied ? 'disabled' : ''}>
+                ${seatNumber}
+            </button>
+        `;
+        
+        seatMap.insertAdjacentHTML('beforeend', seatHtml);
+    }
+}
+
+// Toggle seat selection
+function toggleSeat(seatNumber) {
+    const seat = document.getElementById(`seat_${seatNumber}`);
+    const passengerCount = document.getElementById('passengerFields').children.length;
+    
+    if (selectedSeats.includes(seatNumber)) {
+        selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+        seat.classList.remove('bg-red-500', 'text-white');
+        seat.classList.add('bg-gray-200');
+    } else if (selectedSeats.length < passengerCount) {
+        selectedSeats.push(seatNumber);
+        seat.classList.remove('bg-gray-200');
+        seat.classList.add('bg-red-500', 'text-white');
+    }
+    
+    updateTotalAmount();
+}
+
+// Update total amount
+function updateTotalAmount() {
+    const passengerCount = document.getElementById('passengerFields').children.length;
+    const total = flightData.price * passengerCount;
+    document.getElementById('totalAmount').textContent = `KES ${total.toLocaleString()}`;
+}
+
+// Create booking
+async function createBooking() {
+    const form = document.getElementById('passengerForm');
+    const formData = new FormData(form);
+    const passengers = [];
+    
+    // Group passenger data
+    for (let i = 0; i < document.getElementById('passengerFields').children.length; i++) {
+        passengers.push({
+            firstName: formData.get(`firstName_${i}`),
+            lastName: formData.get(`lastName_${i}`),
+            email: formData.get(`email_${i}`),
+            phone: formData.get(`phone_${i}`),
+            passportNumber: formData.get(`passport_${i}`)
+        });
+    }
+    
+    try {
+        const response = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                flightId: flightData._id,
+                passengers,
+                seatNumbers: selectedSeats
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            bookingId = data.data.booking._id;
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error:', error);
+        return false;
+    }
+}
+
+// Initiate M-Pesa payment
+async function initiatePayment() {
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    
+    if (!phoneNumber) {
+        alert('Please enter your M-Pesa phone number');
+        return;
+    }
+    
+    if (!bookingId && !(await createBooking())) {
+        alert('Error creating booking');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/bookings/payment/initiate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bookingId,
+                phoneNumber
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            showPaymentModal();
+            pollPaymentStatus(data.data.checkoutRequestID);
+        } else {
+            alert(data.message || 'Error initiating payment');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error initiating payment');
+    }
+}
+
+// Show payment modal
+function showPaymentModal() {
+    document.getElementById('paymentModal').classList.remove('hidden');
+}
+
+// Hide payment modal
+function hidePaymentModal() {
+    document.getElementById('paymentModal').classList.add('hidden');
+}
+
+// Poll payment status
+async function pollPaymentStatus(checkoutRequestID) {
+    let attempts = 0;
+    const maxAttempts = 20;
+    const interval = setInterval(async () => {
+        try {
+            const response = await fetch(`/api/bookings/payment/status/${bookingId}`);
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                if (data.data.ResultCode === 0) {
+                    clearInterval(interval);
+                    hidePaymentModal();
+                    window.location.href = `/bookings/${bookingId}`;
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    hidePaymentModal();
+                    alert('Payment timeout. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        attempts++;
+    }, 3000);
+}
+
+// Initialize page
+initBooking();
+</script> 

@@ -1,0 +1,87 @@
+<!-- Flight Card -->
+<div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="showFlightPreview('<%= flight._id %>')">
+    <!-- Header -->
+    <div class="relative h-48 rounded-t-lg overflow-hidden">
+        <img src="<%= flight.logo || '/images/default-flight.jpg' %>" alt="<%= flight.airline %>" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+            <div>
+                <h3 class="text-xl font-bold text-white"><%= flight.airline %></h3>
+                <p class="text-sm text-gray-200">Flight <%= flight.flightNumber %></p>
+            </div>
+            <span class="px-3 py-1 text-sm font-semibold rounded-full <%= getStatusColor(flight.status) %>">
+                <%= flight.status.charAt(0).toUpperCase() + flight.status.slice(1) %>
+            </span>
+        </div>
+    </div>
+
+    <!-- Route Info -->
+    <div class="p-4">
+        <div class="flex items-center justify-between mb-4">
+            <div class="text-center flex-1">
+                <p class="text-lg font-semibold"><%= flight.departureCity %></p>
+                <p class="text-sm text-gray-500"><%= new Date(flight.departureTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></p>
+            </div>
+            <div class="flex-1 flex items-center justify-center px-4">
+                <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                <div class="flex-1 h-px bg-gray-300 mx-2"></div>
+                <i class="fas fa-plane text-blue-500"></i>
+                <div class="flex-1 h-px bg-gray-300 mx-2"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+            </div>
+            <div class="text-center flex-1">
+                <p class="text-lg font-semibold"><%= flight.arrivalCity %></p>
+                <p class="text-sm text-gray-500"><%= new Date(flight.arrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></p>
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="grid grid-cols-4 gap-4 text-sm mb-4">
+            <div>
+                <p class="text-gray-500">Duration</p>
+                <p class="font-semibold"><%= Math.floor(flight.duration / 60) %>h <%= flight.duration % 60 %>m</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Class</p>
+                <p class="font-semibold"><%= flight.class.charAt(0).toUpperCase() + flight.class.slice(1) %></p>
+            </div>
+            <div>
+                <p class="text-gray-500">Seats</p>
+                <p class="font-semibold"><%= flight.seatsAvailable %> available</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Pilot</p>
+                <div class="flex items-center">
+                    <p class="font-semibold"><%= flight.pilot.name %></p>
+                    <div class="ml-1 text-yellow-400">
+                        <% for(let i = 0; i < flight.pilot.rating; i++) { %>
+                            <i class="fas fa-star text-xs"></i>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price and Book -->
+        <div class="flex justify-between items-center pt-4 border-t">
+            <div>
+                <p class="text-sm text-gray-500">Price per person</p>
+                <p class="text-xl font-bold text-blue-600">$<%= flight.price %></p>
+            </div>
+            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Book Now
+            </button>
+        </div>
+    </div>
+</div>
+
+<%
+function getStatusColor(status) {
+    switch (status) {
+        case 'scheduled': return 'bg-green-100 text-green-800';
+        case 'delayed': return 'bg-yellow-100 text-yellow-800';
+        case 'cancelled': return 'bg-red-100 text-red-800';
+        default: return 'bg-blue-100 text-blue-800';
+    }
+}
+%> 

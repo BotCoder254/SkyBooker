@@ -1,0 +1,390 @@
+<!-- Dashboard Layout -->
+<div class="flex h-screen bg-gray-100">
+   
+
+    <!-- Main Content -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="flex items-center justify-between px-6 py-4 bg-white border-b">
+            <div class="flex items-center">
+                <button class="text-gray-500 focus:outline-none md:hidden">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 class="text-xl font-semibold text-gray-800 ml-4">Welcome, <%= user.name %></h2>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="flex items-center text-gray-600 hover:text-gray-700">
+                    <i class="fas fa-bell"></i>
+                    <span class="ml-2 text-sm bg-red-500 text-white rounded-full px-2">3</span>
+                </button>
+                <div class="relative">
+                    <button class="flex items-center text-gray-600 hover:text-gray-700">
+                        <img src="https://ui-avatars.com/api/?name=<%= user.name %>" alt="Profile" class="w-8 h-8 rounded-full">
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- Total Bookings -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Total Bookings</h3>
+                        <span id="bookingsTrend" class="hidden bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            <i class="fas fa-arrow-up"></i> <span>0%</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-ticket-alt text-3xl text-red-500 mr-4"></i>
+                        <div>
+                            <h4 class="text-2xl font-bold text-gray-900" id="totalBookings">
+                                <div class="animate-pulse">
+                                    <div class="h-6 w-20 bg-gray-200 rounded"></div>
+                                </div>
+                            </h4>
+                            <p class="text-gray-500 text-sm">Last 30 days</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Revenue</h3>
+                        <span id="revenueTrend" class="hidden bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            <i class="fas fa-arrow-up"></i> <span>0%</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-dollar-sign text-3xl text-red-500 mr-4"></i>
+                        <div>
+                            <h4 class="text-2xl font-bold text-gray-900" id="totalRevenue">
+                                <div class="animate-pulse">
+                                    <div class="h-6 w-24 bg-gray-200 rounded"></div>
+                                </div>
+                            </h4>
+                            <p class="text-gray-500 text-sm">Last 30 days</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Flights -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Active Flights</h3>
+                        <span id="flightsTrend" class="hidden bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            <i class="fas fa-minus"></i> <span>0%</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-plane text-3xl text-red-500 mr-4"></i>
+                        <div>
+                            <h4 class="text-2xl font-bold text-gray-900" id="activeFlights">
+                                <div class="animate-pulse">
+                                    <div class="h-6 w-16 bg-gray-200 rounded"></div>
+                                </div>
+                            </h4>
+                            <p class="text-gray-500 text-sm">Current</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Satisfaction -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Customer Satisfaction</h3>
+                        <span id="satisfactionTrend" class="hidden bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            <i class="fas fa-arrow-up"></i> <span>0%</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-smile text-3xl text-red-500 mr-4"></i>
+                        <div>
+                            <h4 class="text-2xl font-bold text-gray-900" id="satisfaction">
+                                <div class="animate-pulse">
+                                    <div class="h-6 w-20 bg-gray-200 rounded"></div>
+                                </div>
+                            </h4>
+                            <p class="text-gray-500 text-sm">Average Rating</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Bookings Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-gray-900 text-lg font-semibold mb-4">Booking Trends</h3>
+                    <div id="bookingsChart" class="w-full h-80"></div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-gray-900 text-lg font-semibold mb-4">Revenue Analysis</h3>
+                    <div id="revenueChart" class="w-full h-80"></div>
+                </div>
+            </div>
+
+            <!-- Recent Bookings -->
+            <div class="mt-6">
+                <div class="bg-white rounded-xl shadow-md">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Bookings</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flight</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="recentBookingsTable">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4">
+                                        <div class="animate-pulse space-y-4">
+                                            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                            <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Fetch dashboard data
+async function fetchDashboardData() {
+    try {
+        const response = await fetch('/api/dashboard/stats');
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Update stats
+            document.getElementById('totalBookings').innerHTML = data.totalBookings;
+            document.getElementById('totalRevenue').innerHTML = '$' + data.totalRevenue.toLocaleString();
+            document.getElementById('activeFlights').innerHTML = data.activeFlights;
+            document.getElementById('satisfaction').innerHTML = data.satisfaction.toFixed(1) + '/5.0';
+            
+            // Show trends
+            updateTrend('bookingsTrend', 12);
+            updateTrend('revenueTrend', 8);
+            updateTrend('flightsTrend', 0);
+            updateTrend('satisfactionTrend', 5);
+            
+            // Initialize charts
+            initializeBookingsChart(data.bookingTrends);
+            initializeRevenueChart(data.revenueTrends);
+            
+            // Update recent bookings table
+            updateRecentBookings(data.recentBookings);
+        } else {
+            throw new Error(data.message || 'Failed to fetch dashboard data');
+        }
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        showErrorMessage('Failed to load dashboard data. Please try again later.');
+    }
+}
+
+// Update trend indicator
+function updateTrend(elementId, percentage) {
+    const element = document.getElementById(elementId);
+    element.classList.remove('hidden');
+    const icon = element.querySelector('i');
+    const span = element.querySelector('span');
+    
+    if (percentage > 0) {
+        element.className = 'bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full';
+        icon.className = 'fas fa-arrow-up';
+    } else if (percentage < 0) {
+        element.className = 'bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full';
+        icon.className = 'fas fa-arrow-down';
+    } else {
+        element.className = 'bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full';
+        icon.className = 'fas fa-minus';
+    }
+    
+    span.textContent = Math.abs(percentage) + '%';
+}
+
+// Initialize Bookings Chart
+function initializeBookingsChart(data) {
+    const options = {
+        chart: {
+            type: 'area',
+            height: 320,
+            toolbar: {
+                show: false
+            }
+        },
+        series: [{
+            name: 'Bookings',
+            data: data.map(item => item.count)
+        }],
+        xaxis: {
+            categories: data.map(item => item.date),
+            labels: {
+                style: {
+                    colors: '#64748b'
+                }
+            }
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#64748b'
+                }
+            }
+        },
+        colors: ['#ef4444'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'light',
+                type: 'vertical',
+                opacityFrom: 0.7,
+                opacityTo: 0.2
+            }
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        tooltip: {
+            theme: 'light'
+        }
+    };
+
+    const chart = new ApexCharts(document.querySelector("#bookingsChart"), options);
+    chart.render();
+}
+
+// Initialize Revenue Chart
+function initializeRevenueChart(data) {
+    const options = {
+        chart: {
+            type: 'bar',
+            height: 320,
+            toolbar: {
+                show: false
+            }
+        },
+        series: [{
+            name: 'Revenue',
+            data: data.map(item => item.amount)
+        }],
+        xaxis: {
+            categories: data.map(item => item.date),
+            labels: {
+                style: {
+                    colors: '#64748b'
+                }
+            }
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#64748b'
+                },
+                formatter: function (value) {
+                    return '$' + value.toLocaleString();
+                }
+            }
+        },
+        colors: ['#ef4444'],
+        plotOptions: {
+            bar: {
+                borderRadius: 4,
+                columnWidth: '60%'
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        tooltip: {
+            theme: 'light',
+            y: {
+                formatter: function(value) {
+                    return '$' + value.toLocaleString();
+                }
+            }
+        }
+    };
+
+    const chart = new ApexCharts(document.querySelector("#revenueChart"), options);
+    chart.render();
+}
+
+// Update recent bookings table
+function updateRecentBookings(bookings) {
+    const tbody = document.getElementById('recentBookingsTable');
+    if (!bookings || bookings.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No recent bookings found</td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = bookings.map(booking => `
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${booking.bookingId}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${booking.customerName}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${booking.flightNumber}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                    ${getStatusColor(booking.status)}">
+                    ${booking.status}
+                </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$${booking.amount.toLocaleString()}</td>
+        </tr>
+    `).join('');
+}
+
+// Helper function to get status color
+function getStatusColor(status) {
+    const colors = {
+        'confirmed': 'bg-green-100 text-green-800',
+        'pending': 'bg-yellow-100 text-yellow-800',
+        'cancelled': 'bg-red-100 text-red-800'
+    };
+    return colors[status.toLowerCase()] || 'bg-gray-100 text-gray-800';
+}
+
+// Show error message
+function showErrorMessage(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed top-4 right-4 z-50';
+    errorDiv.innerHTML = `
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">${message}</span>
+        </div>
+    `;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 5000);
+}
+
+// Fetch data when page loads
+document.addEventListener('DOMContentLoaded', fetchDashboardData);
+</script>

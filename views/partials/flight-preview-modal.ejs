@@ -1,0 +1,394 @@
+<!-- Flight Preview Modal -->
+<div id="flightPreviewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-10 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-start mb-4">
+            <h2 class="text-2xl font-bold text-gray-900">Flight Details</h2>
+            <button onclick="closeFlightPreview()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="flightPreviewContent" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Flight Details Section -->
+            <div class="space-y-6">
+                <!-- Image Gallery -->
+                <div class="relative h-64 bg-gray-100 rounded-lg overflow-hidden">
+                    <div id="flightImages" class="h-full"></div>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2" id="imageIndicators"></div>
+                </div>
+
+                <!-- Flight Info -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 id="previewAirline" class="text-xl font-semibold"></h3>
+                            <p id="previewFlightNumber" class="text-gray-600"></p>
+                        </div>
+                        <span id="previewStatus" class="px-3 py-1 text-sm font-semibold rounded-full"></span>
+                    </div>
+
+                    <!-- Route Details -->
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="text-center">
+                            <p id="previewDepartureCity" class="font-semibold"></p>
+                            <p id="previewDepartureTime" class="text-sm text-gray-500"></p>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center px-4">
+                            <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                            <div class="flex-1 h-px bg-gray-300 mx-2"></div>
+                            <i class="fas fa-plane text-blue-500"></i>
+                            <div class="flex-1 h-px bg-gray-300 mx-2"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                        </div>
+                        <div class="text-center">
+                            <p id="previewArrivalCity" class="font-semibold"></p>
+                            <p id="previewArrivalTime" class="text-sm text-gray-500"></p>
+                        </div>
+                    </div>
+
+                    <!-- Route Map -->
+                    <div class="h-48 bg-gray-100 rounded-lg overflow-hidden">
+                        <div id="routeMap" class="w-full h-full"></div>
+                    </div>
+
+                    <!-- Additional Details -->
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="text-gray-500">Duration</p>
+                            <p id="previewDuration" class="font-semibold"></p>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="text-gray-500">Aircraft</p>
+                            <p id="previewAircraft" class="font-semibold"></p>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="text-gray-500">Class</p>
+                            <p id="previewClass" class="font-semibold"></p>
+                        </div>
+                    </div>
+
+                    <!-- Pilot Details -->
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-900">Pilot Information</h4>
+                            <div class="flex text-yellow-400">
+                                <div id="previewPilotRating"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-gray-500">Name</p>
+                                <p id="previewPilotName" class="font-semibold"></p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">Experience</p>
+                                <p id="previewPilotExperience" class="font-semibold"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Form Section -->
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Book Your Flight</h3>
+                <form id="bookingForm" class="space-y-4">
+                    <input type="hidden" id="flightId">
+                    
+                    <!-- Price Info -->
+                    <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                        <span class="text-gray-700">Price per person</span>
+                        <span id="previewPrice" class="text-lg font-bold text-blue-600"></span>
+                    </div>
+
+                    <!-- Passenger Count -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number of Passengers</label>
+                        <select id="passengerCount" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="updateTotalAmount()">
+                            <option value="1">1 Passenger</option>
+                            <option value="2">2 Passengers</option>
+                            <option value="3">3 Passengers</option>
+                            <option value="4">4 Passengers</option>
+                        </select>
+                    </div>
+
+                    <!-- Passenger Details -->
+                    <div id="passengerDetails" class="space-y-4">
+                        <!-- Passenger forms will be added here dynamically -->
+                    </div>
+
+                    <!-- Total Amount -->
+                    <div class="flex justify-between items-center p-3 bg-gray-100 rounded-lg">
+                        <span class="font-medium">Total Amount</span>
+                        <span id="totalAmount" class="text-lg font-bold text-blue-600"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Book Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Google Maps JavaScript -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+
+<script>
+let currentFlightData = null;
+let currentImageIndex = 0;
+let routeMap = null;
+
+// Show flight preview
+async function showFlightPreview(flightId) {
+    try {
+        const response = await fetch(`/api/flights/${flightId}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            currentFlightData = data.data.flight;
+            renderFlightPreview();
+            document.getElementById('flightPreviewModal').classList.remove('hidden');
+            initializeMap();
+        }
+    } catch (error) {
+        showToast('Error loading flight details', 'error');
+    }
+}
+
+// Initialize Google Maps
+function initializeMap() {
+    if (!routeMap) {
+        routeMap = new google.maps.Map(document.getElementById('routeMap'), {
+            zoom: 4,
+            mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+    }
+
+    // Create markers for departure and arrival cities
+    const bounds = new google.maps.LatLngBounds();
+    const departureMarker = new google.maps.Marker({
+        position: { lat: currentFlightData.departureLat, lng: currentFlightData.departureLng },
+        map: routeMap,
+        title: currentFlightData.departureCity,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 7,
+            fillColor: '#3B82F6',
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 2
+        }
+    });
+
+    const arrivalMarker = new google.maps.Marker({
+        position: { lat: currentFlightData.arrivalLat, lng: currentFlightData.arrivalLng },
+        map: routeMap,
+        title: currentFlightData.arrivalCity,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 7,
+            fillColor: '#3B82F6',
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 2
+        }
+    });
+
+    // Draw flight path
+    const flightPath = new google.maps.Polyline({
+        path: [
+            { lat: currentFlightData.departureLat, lng: currentFlightData.departureLng },
+            { lat: currentFlightData.arrivalLat, lng: currentFlightData.arrivalLng }
+        ],
+        geodesic: true,
+        strokeColor: '#3B82F6',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+
+    flightPath.setMap(routeMap);
+
+    // Fit map to show both markers
+    bounds.extend(departureMarker.getPosition());
+    bounds.extend(arrivalMarker.getPosition());
+    routeMap.fitBounds(bounds);
+}
+
+// Close flight preview
+function closeFlightPreview() {
+    document.getElementById('flightPreviewModal').classList.add('hidden');
+    currentFlightData = null;
+    currentImageIndex = 0;
+}
+
+// Render flight preview
+function renderFlightPreview() {
+    // Set basic info
+    document.getElementById('flightId').value = currentFlightData._id;
+    document.getElementById('previewAirline').textContent = currentFlightData.airline;
+    document.getElementById('previewFlightNumber').textContent = `Flight ${currentFlightData.flightNumber}`;
+    document.getElementById('previewStatus').textContent = currentFlightData.status.charAt(0).toUpperCase() + currentFlightData.status.slice(1);
+    document.getElementById('previewStatus').className = `px-3 py-1 text-sm font-semibold rounded-full ${getStatusColor(currentFlightData.status)}`;
+    
+    // Set route info
+    document.getElementById('previewDepartureCity').textContent = currentFlightData.departureCity;
+    document.getElementById('previewArrivalCity').textContent = currentFlightData.arrivalCity;
+    document.getElementById('previewDepartureTime').textContent = new Date(currentFlightData.departureTime).toLocaleString();
+    document.getElementById('previewArrivalTime').textContent = new Date(currentFlightData.arrivalTime).toLocaleString();
+    
+    // Set additional details
+    document.getElementById('previewDuration').textContent = `${Math.floor(currentFlightData.duration / 60)}h ${currentFlightData.duration % 60}m`;
+    document.getElementById('previewAircraft').textContent = currentFlightData.aircraft;
+    document.getElementById('previewClass').textContent = currentFlightData.class;
+    document.getElementById('previewPrice').textContent = `$${currentFlightData.price}`;
+
+    // Set pilot details
+    document.getElementById('previewPilotName').textContent = currentFlightData.pilot.name;
+    document.getElementById('previewPilotExperience').textContent = `${currentFlightData.pilot.experience} years`;
+    
+    // Set pilot rating stars
+    const ratingContainer = document.getElementById('previewPilotRating');
+    ratingContainer.innerHTML = '';
+    for (let i = 0; i < currentFlightData.pilot.rating; i++) {
+        ratingContainer.innerHTML += '<i class="fas fa-star"></i>';
+    }
+    
+    // Render images
+    renderImageGallery();
+    
+    // Initialize passenger details
+    updatePassengerForms();
+    updateTotalAmount();
+}
+
+// Render image gallery
+function renderImageGallery() {
+    const imagesContainer = document.getElementById('flightImages');
+    const indicatorsContainer = document.getElementById('imageIndicators');
+    
+    imagesContainer.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
+    
+    const images = currentFlightData.images || [currentFlightData.logo || '/images/default-flight.jpg'];
+    
+    images.forEach((image, index) => {
+        const img = document.createElement('img');
+        img.src = image;
+        img.alt = `${currentFlightData.airline} - Image ${index + 1}`;
+        img.className = `absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`;
+        imagesContainer.appendChild(img);
+        
+        const indicator = document.createElement('button');
+        indicator.className = `w-2 h-2 rounded-full transition-colors ${index === currentImageIndex ? 'bg-blue-600' : 'bg-gray-300'}`;
+        indicator.onclick = () => showImage(index);
+        indicatorsContainer.appendChild(indicator);
+    });
+}
+
+// Show specific image
+function showImage(index) {
+    const images = document.getElementById('flightImages').children;
+    const indicators = document.getElementById('imageIndicators').children;
+    
+    images[currentImageIndex].classList.add('opacity-0');
+    indicators[currentImageIndex].classList.replace('bg-blue-600', 'bg-gray-300');
+    
+    currentImageIndex = index;
+    
+    images[currentImageIndex].classList.remove('opacity-0');
+    indicators[currentImageIndex].classList.replace('bg-gray-300', 'bg-blue-600');
+}
+
+// Update passenger forms
+function updatePassengerForms() {
+    const container = document.getElementById('passengerDetails');
+    const count = parseInt(document.getElementById('passengerCount').value);
+    
+    container.innerHTML = '';
+    
+    for (let i = 0; i < count; i++) {
+        container.innerHTML += `
+            <div class="space-y-3 p-4 bg-white rounded-lg">
+                <h4 class="font-medium">Passenger ${i + 1}</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input type="text" name="passengers[${i}][firstName]" required
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input type="text" name="passengers[${i}][lastName]" required
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Passport Number</label>
+                    <input type="text" name="passengers[${i}][passportNumber]" required
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Update total amount
+function updateTotalAmount() {
+    const count = parseInt(document.getElementById('passengerCount').value);
+    const total = count * currentFlightData.price;
+    document.getElementById('totalAmount').textContent = `$${total}`;
+}
+
+// Handle booking form submission
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    try {
+        const formData = new FormData(this);
+        const passengers = [];
+        const count = parseInt(document.getElementById('passengerCount').value);
+        
+        for (let i = 0; i < count; i++) {
+            passengers.push({
+                firstName: formData.get(`passengers[${i}][firstName]`),
+                lastName: formData.get(`passengers[${i}][lastName]`),
+                passportNumber: formData.get(`passengers[${i}][passportNumber]`)
+            });
+        }
+        
+        const response = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                flightId: document.getElementById('flightId').value,
+                passengers
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            window.location.href = `/bookings/${data.data.booking._id}`;
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+});
+
+// Get status color class
+function getStatusColor(status) {
+    switch (status) {
+        case 'scheduled': return 'bg-green-100 text-green-800';
+        case 'delayed': return 'bg-yellow-100 text-yellow-800';
+        case 'cancelled': return 'bg-red-100 text-red-800';
+        default: return 'bg-blue-100 text-blue-800';
+    }
+}
+</script> 

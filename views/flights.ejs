@@ -1,0 +1,344 @@
+<div class="container mx-auto px-4 py-8">
+    <!-- Search Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Search Flights</h2>
+        <form id="searchForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- From -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                <input type="text" name="departureCity" placeholder="Departure City" required
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <!-- To -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                <input type="text" name="arrivalCity" placeholder="Arrival City" required
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <!-- Date -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                <input type="date" name="departureDate" required
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <!-- Search Button -->
+            <div class="flex items-end">
+                <button type="submit" class="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    Search Flights
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Price Range -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <select id="priceRange" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">All Prices</option>
+                    <option value="0-500">$0 - $500</option>
+                    <option value="501-1000">$501 - $1000</option>
+                    <option value="1001-2000">$1001 - $2000</option>
+                    <option value="2001+">$2001+</option>
+                </select>
+            </div>
+            
+            <!-- Airlines -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Airlines</label>
+                <select id="airline" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">All Airlines</option>
+                </select>
+            </div>
+            
+            <!-- Class -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Class</label>
+                <select id="class" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">All Classes</option>
+                    <option value="economy">Economy</option>
+                    <option value="business">Business</option>
+                    <option value="first">First</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Flight cards will be added here dynamically -->
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResults" class="hidden text-center py-12">
+        <i class="fas fa-plane-slash text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No Flights Found</h3>
+        <p class="text-gray-500">Try adjusting your search criteria</p>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="hidden text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"></div>
+        <p class="mt-4 text-gray-600">Searching for flights...</p>
+    </div>
+</div>
+
+<script>
+let currentSearchParams = {};
+let airlines = new Set();
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelector('input[name="departureDate"]').min = today;
+    
+    // Initialize event listeners
+    document.getElementById('searchForm').addEventListener('submit', handleSearch);
+    document.getElementById('priceRange').addEventListener('change', applyFilters);
+    document.getElementById('airline').addEventListener('change', applyFilters);
+    document.getElementById('class').addEventListener('change', applyFilters);
+});
+
+// Handle search form submission
+async function handleSearch(e) {
+    e.preventDefault();
+    showLoading();
+    
+    const formData = new FormData(e.target);
+    currentSearchParams = {
+        departureCity: formData.get('departureCity'),
+        arrivalCity: formData.get('arrivalCity'),
+        departureDate: formData.get('departureDate')
+    };
+    
+    try {
+        const response = await fetch(`/api/flights?${new URLSearchParams(currentSearchParams)}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            // Update airlines filter
+            airlines = new Set(data.data.flights.map(flight => flight.airline));
+            updateAirlinesFilter();
+            
+            // Render flights
+            renderFlights(data.data.flights);
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        showToast(error.message, 'error');
+        showNoResults();
+    }
+}
+
+// Update airlines filter options
+function updateAirlinesFilter() {
+    const select = document.getElementById('airline');
+    const currentValue = select.value;
+    
+    // Clear existing options except the first one
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+    
+    // Add new options
+    Array.from(airlines).sort().forEach(airline => {
+        const option = new Option(airline, airline);
+        select.add(option);
+    });
+    
+    // Restore previous selection if it still exists
+    if (currentValue && airlines.has(currentValue)) {
+        select.value = currentValue;
+    }
+}
+
+// Apply filters to search results
+function applyFilters() {
+    const priceRange = document.getElementById('priceRange').value;
+    const airline = document.getElementById('airline').value;
+    const flightClass = document.getElementById('class').value;
+    
+    const params = { ...currentSearchParams };
+    
+    if (priceRange) {
+        const [min, max] = priceRange.split('-');
+        params.priceRange = priceRange;
+    }
+    
+    if (airline) {
+        params.airline = airline;
+    }
+    
+    if (flightClass) {
+        params.class = flightClass;
+    }
+    
+    // Fetch filtered results
+    fetchFlights(params);
+}
+
+// Fetch flights with given parameters
+async function fetchFlights(params) {
+    showLoading();
+    
+    try {
+        const response = await fetch(`/api/flights?${new URLSearchParams(params)}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            renderFlights(data.data.flights);
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        showToast(error.message, 'error');
+        showNoResults();
+    }
+}
+
+// Render flight cards
+function renderFlights(flights) {
+    const container = document.getElementById('searchResults');
+    const noResults = document.getElementById('noResults');
+    const loading = document.getElementById('loadingState');
+    
+    container.innerHTML = '';
+    
+    if (flights.length === 0) {
+        container.classList.add('hidden');
+        noResults.classList.remove('hidden');
+    } else {
+        container.classList.remove('hidden');
+        noResults.classList.add('hidden');
+        
+        flights.forEach(flight => {
+            // Create flight card HTML
+            const card = `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold">${flight.airline}</h3>
+                            <span class="text-2xl font-bold text-red-600">$${flight.price}</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <p class="text-sm text-gray-500">Departure</p>
+                                <p class="font-semibold">${flight.departureCity}</p>
+                                <p class="text-sm">${flight.departureTime}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Arrival</p>
+                                <p class="font-semibold">${flight.arrivalCity}</p>
+                                <p class="text-sm">${flight.arrivalTime}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="inline-block px-2 py-1 text-sm bg-red-100 text-red-800 rounded">
+                                    ${flight.class}
+                                </span>
+                            </div>
+                            <button onclick="bookFlight('${flight._id}')" 
+                                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    }
+    
+    loading.classList.add('hidden');
+}
+
+// Show loading state
+function showLoading() {
+    document.getElementById('searchResults').classList.add('hidden');
+    document.getElementById('noResults').classList.add('hidden');
+    document.getElementById('loadingState').classList.remove('hidden');
+}
+
+// Show no results message
+function showNoResults() {
+    document.getElementById('searchResults').classList.add('hidden');
+    document.getElementById('noResults').classList.remove('hidden');
+    document.getElementById('loadingState').classList.add('hidden');
+}
+
+// Handle flight booking
+async function bookFlight(flightId) {
+    try {
+        const response = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ flightId }),
+            credentials: 'same-origin'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 z-50';
+            successDiv.innerHTML = `
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">Flight booked successfully! Redirecting to bookings...</span>
+                </div>
+            `;
+            document.body.appendChild(successDiv);
+            
+            // Redirect to bookings page
+            setTimeout(() => {
+                window.location.href = '/bookings';
+            }, 1500);
+        } else {
+            throw new Error(data.message || 'Error booking flight');
+        }
+    } catch (error) {
+        // Show error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 right-4 z-50';
+        errorDiv.innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">${error.message}</span>
+            </div>
+        `;
+        document.body.appendChild(errorDiv);
+        
+        // Remove error message after 5 seconds
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
+    }
+}
+
+// Show toast message
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 z-50';
+    toast.innerHTML = `
+        <div class="bg-${type === 'success' ? 'green' : 'red'}-100 border border-${type === 'success' ? 'green' : 'red'}-400 text-${type === 'success' ? 'green' : 'red'}-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">${message}</span>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+</script>

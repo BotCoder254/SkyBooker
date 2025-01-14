@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | Flight Booking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body class="bg-gray-100">
+    <% if (typeof user !== 'undefined' && user) { %>
+        <!-- Sidebar -->
+        <aside class="fixed inset-y-0 left-0 bg-white shadow-lg max-h-screen w-64 transition-transform duration-300 ease-in-out">
+            <div class="flex flex-col justify-between h-full">
+                <div class="flex-grow">
+                    <div class="px-4 py-6 text-center border-b">
+                        <h1 class="text-xl font-bold leading-none text-red-700">
+                            <i class="fas fa-plane-departure mr-2"></i>
+                            Flight Booking
+                        </h1>
+                    </div>
+                    <div class="p-4">
+                        <ul class="space-y-1">
+                            <% if (user.role === 'admin') { %>
+                                <li>
+                                    <a href="/admin/dashboard" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/dashboard' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-chart-line w-6"></i>
+                                        Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/flights" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/flights' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-plane w-6"></i>
+                                        Manage Flights
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/bookings" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/bookings' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-ticket-alt w-6"></i>
+                                        All Bookings
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/users" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/users' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-users w-6"></i>
+                                        Manage Users
+                                    </a>
+                                </li>
+                            <% } else { %>
+                                <li>
+                                    <a href="/dashboard" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/dashboard' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-chart-line w-6"></i>
+                                        Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/flights" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/flights' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-plane w-6"></i>
+                                        Book Flights
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/bookings" 
+                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/bookings' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                        <i class="fas fa-ticket-alt w-6"></i>
+                                        My Bookings
+                                    </a>
+                                </li>
+                            <% } %>
+                            <!-- Profile Section -->
+                            <li class="mt-4 pt-4 border-t border-gray-100">
+                                <a href="/profile" 
+                                   class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/profile' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
+                                    <i class="fas fa-user-circle w-6"></i>
+                                    Profile
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                                    <i class="fas fa-user text-red-500"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate">
+                                    <%= user.name %>
+                                </p>
+                                <p class="text-xs text-gray-500 truncate">
+                                    <%= user.email %>
+                                </p>
+                            </div>
+                        </div>
+                        <button id="logoutBtn" class="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-64 p-8">
+            <%- body %>
+        </main>
+
+        <script>
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/api/auth/logout', {
+                        method: 'POST',
+                        credentials: 'same-origin'
+                    });
+
+                    if (response.ok) {
+                        window.location.href = '/login';
+                    } else {
+                        console.error('Logout failed');
+                    }
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            });
+        </script>
+    <% } else { %>
+        <!-- Public pages -->
+        <%- body %>
+    <% } %>
+</body>
+</html>
