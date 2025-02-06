@@ -94,8 +94,12 @@
 
 <script>
 function handleRegister() {
+
+    console.log("Register button clicked");
     // Reset error messages
     document.querySelectorAll('.text-red-500').forEach(el => el.classList.add('hidden'));
+
+    
     
     // Get form data
     const name = document.getElementById('name').value.trim();
@@ -142,6 +146,8 @@ function handleRegister() {
     const submitButton = document.querySelector('button[type="button"]');
     submitButton.disabled = true;
     submitButton.innerHTML = 'Creating Account...';
+
+    console.log("Form data is valid");
     
     fetch('/api/auth/register', {
         method: 'POST',

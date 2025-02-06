@@ -97,6 +97,7 @@ flightSchema.virtual('formattedDuration').get(function() {
     return `${hours}h ${minutes}m`;
 });
 
-const Flight = mongoose.model('Flight', flightSchema);
+// Check if model exists before compiling
+const Flight = mongoose.models.Flight || mongoose.model('Flight', flightSchema);
 
 module.exports = Flight; 

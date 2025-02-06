@@ -12,11 +12,13 @@ router.get('/stats', isAuthenticated, async (req, res) => {
 
         // Get total bookings in last 30 days
         const totalBookings = await Booking.countDocuments({
+            user: req.user._id,
             createdAt: { $gte: thirtyDaysAgo }
         });
 
         // Get total revenue in last 30 days
         const bookings = await Booking.find({
+            user: req.user._id,
             createdAt: { $gte: thirtyDaysAgo }
         });
         const totalRevenue = bookings.reduce((sum, booking) => sum + booking.totalAmount, 0);
@@ -30,13 +32,13 @@ router.get('/stats', isAuthenticated, async (req, res) => {
         const satisfaction = 4.5;
 
         // Get booking trends (last 7 days)
-        const bookingTrends = await getBookingTrends();
+        const bookingTrends = await getBookingTrends(req.user._id);
 
         // Get revenue trends (last 7 days)
-        const revenueTrends = await getRevenueTrends();
+        const revenueTrends = await getRevenueTrends(req.user._id);
 
         // Get recent bookings
-        const recentBookings = await getRecentBookings();
+        const recentBookings = await getRecentBookings(req.user._id);
 
         res.json({
             totalBookings,
@@ -54,13 +56,14 @@ router.get('/stats', isAuthenticated, async (req, res) => {
 });
 
 // Helper function to get booking trends
-async function getBookingTrends() {
+async function getBookingTrends(userId) {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const bookings = await Booking.aggregate([
         {
             $match: {
+                user: userId,
                 createdAt: { $gte: sevenDaysAgo }
             }
         },
@@ -92,13 +95,14 @@ async function getBookingTrends() {
 }
 
 // Helper function to get revenue trends
-async function getRevenueTrends() {
+async function getRevenueTrends(userId) {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const revenues = await Booking.aggregate([
         {
             $match: {
+                user: userId,
                 createdAt: { $gte: sevenDaysAgo }
             }
         },
@@ -130,16 +134,15 @@ async function getRevenueTrends() {
 }
 
 // Helper function to get recent bookings
-async function getRecentBookings() {
-    return await Booking.find()
+async function getRecentBookings(userId) {
+    return await Booking.find({ user: userId })
         .sort({ createdAt: -1 })
         .limit(5)
-        .populate('user', 'name')
         .populate('flight', 'flightNumber')
         .lean()
         .then(bookings => bookings.map(booking => ({
             bookingId: booking._id,
-            customerName: booking.user.name,
+            customerName: req.user.name,
             flightNumber: booking.flight.flightNumber,
             status: booking.status,
             amount: booking.totalAmount

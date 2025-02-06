@@ -69,6 +69,7 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
-const User = mongoose.model('User', userSchema);
+// Check if model exists before compiling
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 module.exports = User; 

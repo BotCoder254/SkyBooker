@@ -78,6 +78,7 @@ bookingSchema.index({ flight: 1 });
 bookingSchema.index({ 'payment.mpesaReceiptNumber': 1 });
 bookingSchema.index({ 'payment.checkoutRequestID': 1 });
 
-const Booking = mongoose.model('Booking', bookingSchema);
+// Check if model exists before compiling
+const Booking = mongoose.models.Booking || mongoose.model('Booking', bookingSchema);
 
 module.exports = Booking; 
