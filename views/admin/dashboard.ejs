@@ -34,16 +34,8 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900" id="totalRevenue">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-8 w-24 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
-                                    <dd class="text-sm text-gray-500" id="avgRevenue">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-4 w-32 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="totalRevenue">$0.00</dd>
+                                    <dd class="text-sm text-gray-500" id="avgRevenue">Avg. $0.00 per booking</dd>
                                 </dl>
                             </div>
                         </div>
@@ -60,16 +52,8 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Bookings</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900" id="totalBookings">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-8 w-20 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
-                                    <dd class="text-sm text-gray-500" id="confirmedBookings">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-4 w-28 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="totalBookings">0</dd>
+                                    <dd class="text-sm text-gray-500" id="confirmedBookings">0 confirmed</dd>
                                 </dl>
                             </div>
                         </div>
@@ -86,16 +70,8 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Active Flights</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900" id="activeFlights">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-8 w-16 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
-                                    <dd class="text-sm text-gray-500" id="totalFlights">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-4 w-32 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="activeFlights">0</dd>
+                                    <dd class="text-sm text-gray-500" id="totalFlights">Out of 0 total</dd>
                                 </dl>
                             </div>
                         </div>
@@ -112,16 +88,8 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900" id="totalUsers">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-8 w-20 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
-                                    <dd class="text-sm text-gray-500" id="activeUsers">
-                                        <div class="animate-pulse flex space-x-4">
-                                            <div class="h-4 w-28 bg-gray-200 rounded"></div>
-                                        </div>
-                                    </dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="totalUsers">0</dd>
+                                    <dd class="text-sm text-gray-500" id="activeUsers">0 active</dd>
                                 </dl>
                             </div>
                         </div>
@@ -134,31 +102,13 @@
                 <!-- Revenue Chart -->
                 <div class="bg-white shadow rounded-lg p-6 transform transition-all duration-300 hover:scale-105">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Revenue Overview</h3>
-                    <div id="revenueChart" class="h-80">
-                        <div class="animate-pulse flex flex-col space-y-4 h-full">
-                            <div class="h-2 bg-gray-200 rounded w-1/4"></div>
-                            <div class="space-y-3 flex-grow">
-                                <div class="h-40 bg-gray-200 rounded"></div>
-                                <div class="h-24 bg-gray-200 rounded"></div>
-                                <div class="h-32 bg-gray-200 rounded"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="revenueChart" class="h-80"></div>
                 </div>
 
                 <!-- Bookings Chart -->
                 <div class="bg-white shadow rounded-lg p-6 transform transition-all duration-300 hover:scale-105">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Booking Trends</h3>
-                    <div id="bookingsChart" class="h-80">
-                        <div class="animate-pulse flex flex-col space-y-4 h-full">
-                            <div class="h-2 bg-gray-200 rounded w-1/4"></div>
-                            <div class="space-y-3 flex-grow">
-                                <div class="h-24 bg-gray-200 rounded"></div>
-                                <div class="h-32 bg-gray-200 rounded"></div>
-                                <div class="h-28 bg-gray-200 rounded"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="bookingsChart" class="h-80"></div>
                 </div>
             </div>
 
@@ -171,12 +121,8 @@
                     <div class="bg-gray-50 px-6 py-4">
                         <div class="flow-root">
                             <ul class="-mb-8" id="recentActivity">
-                                <li>
-                                    <div class="animate-pulse space-y-4 pb-8">
-                                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                                        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-                                        <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-                                    </div>
+                                <li class="pb-4">
+                                    <div class="text-sm text-gray-500 text-center">No recent activity</div>
                                 </li>
                             </ul>
                         </div>
