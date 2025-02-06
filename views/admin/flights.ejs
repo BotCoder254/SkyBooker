@@ -98,102 +98,87 @@
 </div>
 
 <!-- Create Flight Modal -->
-<div id="createFlightModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+<div id="createFlightModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
         <div class="flex justify-between items-center pb-3">
-            <h3 class="text-2xl font-semibold text-gray-900">Create New Flight</h3>
-            <button onclick="hideCreateFlightModal()" class="text-gray-400 hover:text-gray-500">
+            <h3 class="text-xl font-semibold text-gray-900">Create New Flight</h3>
+            <button onclick="closeCreateFlightModal()" class="text-gray-400 hover:text-gray-500">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
-        <form id="createFlightForm" class="space-y-8" onsubmit="handleCreateFlightSubmit(event)">
-            <!-- Basic Information -->
-            <div>
-                <h4 class="text-lg font-medium text-gray-900 mb-4">Basic Information</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Flight Number</label>
-                        <input type="text" name="flightNumber" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Airline</label>
-                        <input type="text" name="airline" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
+        <form id="createFlightForm" class="space-y-6" onsubmit="return false;">
+            <!-- Flight Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Flight Number -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Flight Number</label>
+                    <input type="text" name="flightNumber" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
                 </div>
-            </div>
 
-            <!-- Route Information -->
-            <div>
-                <h4 class="text-lg font-medium text-gray-900 mb-4">Route Information</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">From</label>
-                        <input type="text" name="departureCity" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">To</label>
-                        <input type="text" name="arrivalCity" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Departure Time</label>
-                        <input type="datetime-local" name="departureTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Arrival Time</label>
-                        <input type="datetime-local" name="arrivalTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
+                <!-- Aircraft Type -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Aircraft Type</label>
+                    <input type="text" name="aircraftType" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
                 </div>
-            </div>
 
-            <!-- Pricing and Capacity -->
-            <div>
-                <h4 class="text-lg font-medium text-gray-900 mb-4">Pricing and Capacity</h4>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Price</label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-500 sm:text-sm">$</span>
-                            </div>
-                            <input type="number" name="price" required min="0" step="0.01" class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                <!-- Origin -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Origin</label>
+                    <input type="text" name="origin" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                </div>
+
+                <!-- Destination -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Destination</label>
+                    <input type="text" name="destination" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                </div>
+
+                <!-- Departure Date -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Departure Date</label>
+                    <input type="datetime-local" name="departureDate" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                </div>
+
+                <!-- Arrival Date -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Arrival Date</label>
+                    <input type="datetime-local" name="arrivalDate" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Price</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">$</span>
                         </div>
+                        <input type="number" name="price" required min="0" step="0.01"
+                               class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Seats Available</label>
-                        <input type="number" name="seatsAvailable" required min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Class</label>
-                        <select name="class" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                            <option value="economy">Economy</option>
-                            <option value="business">Business</option>
-                            <option value="first">First Class</option>
-                        </select>
-                    </div>
+                </div>
+
+                <!-- Capacity -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Capacity</label>
+                    <input type="number" name="capacity" required min="1"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
                 </div>
             </div>
 
-            <!-- Aircraft Information -->
-            <div>
-                <h4 class="text-lg font-medium text-gray-900 mb-4">Aircraft Information</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Aircraft Type</label>
-                        <input type="text" name="aircraft" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Flight Images</label>
-                        <input type="file" name="images" multiple accept="image/*" class="mt-1 block w-full">
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex justify-end space-x-4 pt-4">
-                <button type="button" onclick="hideCreateFlightModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-3 pt-4">
+                <button type="button" onclick="closeCreateFlightModal()"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md">
                     Cancel
                 </button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                <button type="submit" onclick="handleCreateFlight()"
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md">
                     Create Flight
                 </button>
             </div>
@@ -258,31 +243,30 @@ async function loadFlights() {
 }
 
 // Function to handle form submission
-async function handleCreateFlightSubmit(event) {
-    event.preventDefault();
-    
-    const form = event.target;
+async function handleCreateFlight() {
+    const form = document.getElementById('createFlightForm');
     const formData = new FormData(form);
-    
+    const data = Object.fromEntries(formData.entries());
+
     try {
         const response = await fetch('/api/admin/flights', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
-        
-        if (!response.ok) {
-            throw new Error('Failed to create flight');
+
+        const result = await response.json();
+
+        if (response.ok) {
+            showToast('Flight created successfully', 'success');
+            closeCreateFlightModal();
+            // Refresh the flights list
+            window.location.reload();
+        } else {
+            showToast(result.message || 'Error creating flight', 'error');
         }
-        
-        // Show success message
-        showToast('Flight created successfully!', 'success');
-        
-        // Hide modal and reset form
-        hideCreateFlightModal();
-        form.reset();
-        
-        // Reload flights table
-        loadFlights();
     } catch (error) {
         console.error('Error creating flight:', error);
         showToast('Failed to create flight. Please try again.', 'error');
@@ -365,15 +349,15 @@ function openModal() {
     document.getElementById('createFlightModal').classList.remove('hidden');
 }
 
-function hideCreateFlightModal() {
+function closeCreateFlightModal() {
     document.getElementById('createFlightModal').classList.add('hidden');
 }
 
 // Event listeners
 document.getElementById('addFlightBtn').addEventListener('click', openModal);
-document.getElementById('closeModal').addEventListener('click', hideCreateFlightModal);
-document.getElementById('cancelBtn').addEventListener('click', hideCreateFlightModal);
-document.getElementById('createFlightForm').addEventListener('submit', handleCreateFlightSubmit);
+document.getElementById('closeModal').addEventListener('click', closeCreateFlightModal);
+document.getElementById('cancelBtn').addEventListener('click', closeCreateFlightModal);
+document.getElementById('createFlightForm').addEventListener('submit', handleCreateFlight);
 
 // Search and filter functions
 document.getElementById('searchFlight').addEventListener('input', debounce(loadFlights, 300));
@@ -420,19 +404,10 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// Show/Hide Modal Functions
-function showCreateFlightModal() {
-    document.getElementById('createFlightModal').classList.remove('hidden');
-}
-
-function hideCreateFlightModal() {
-    document.getElementById('createFlightModal').classList.add('hidden');
-}
-
 // Close modal when clicking outside
-document.getElementById('createFlightModal').addEventListener('click', (e) => {
-    if (e.target.id === 'createFlightModal') {
-        hideCreateFlightModal();
+document.getElementById('createFlightModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeCreateFlightModal();
     }
 });
 </script>

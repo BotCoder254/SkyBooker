@@ -50,7 +50,12 @@ const sendTokenResponse = (user, statusCode, res) => {
     // Set the cookie
     res.cookie('jwt', token, cookieOptions);
 
-    // Send response with redirect URL
+    // Check if the client accepts HTML
+    if (res.req.headers.accept && res.req.headers.accept.includes('text/html')) {
+        return res.redirect(redirectUrl);
+    }
+
+    // Otherwise send JSON response
     res.status(statusCode).json({
         status: 'success',
         message: 'Login successful',
@@ -155,15 +160,23 @@ exports.logout = (req, res) => {
                 message: 'Error during logout'
             });
         }
+        
+        // Clear the JWT cookie
         res.cookie('jwt', 'loggedout', {
             expires: new Date(Date.now() + 10 * 1000),
             httpOnly: true
         });
-        res.status(200).json({ 
-            status: 'success',
-            message: 'Logged out successfully',
-            redirect: '/login'
-        });
+
+        // Check if the request is from browser (GET) or API (POST)
+        if (req.method === 'GET') {
+            res.redirect('/login');
+        } else {
+            res.status(200).json({ 
+                status: 'success',
+                message: 'Logged out successfully',
+                redirect: '/login'
+            });
+        }
     });
 };
 

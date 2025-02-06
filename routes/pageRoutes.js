@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect, isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 const adminController = require('../controllers/adminController');
+const { logout } = require('../controllers/authController');
 
 // Public routes
 router.get('/', isAuthenticated, (req, res) => {
@@ -11,6 +12,9 @@ router.get('/', isAuthenticated, (req, res) => {
         user: req.user
     });
 });
+
+// Add logout route
+router.get('/logout', logout);
 
 router.get('/login', isAuthenticated, (req, res) => {
     res.render('login', { 

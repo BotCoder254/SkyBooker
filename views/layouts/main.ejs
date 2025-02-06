@@ -12,101 +12,91 @@
 <body class="bg-gray-100">
     <% if (typeof user !== 'undefined' && user) { %>
         <!-- Sidebar -->
-        <aside class="fixed inset-y-0 left-0 bg-white shadow-lg max-h-screen w-64 transition-transform duration-300 ease-in-out">
-            <div class="flex flex-col justify-between h-full">
-                <div class="flex-grow">
-                    <div class="px-4 py-6 text-center border-b">
-                        <h1 class="text-xl font-bold leading-none text-red-700">
-                            <i class="fas fa-plane-departure mr-2"></i>
-                            Flight Booking
-                        </h1>
-                    </div>
-                    <div class="p-4">
-                        <ul class="space-y-1">
-                            <% if (user.role === 'admin') { %>
-                                <li>
-                                    <a href="/admin/dashboard" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/dashboard' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-chart-line w-6"></i>
-                                        Dashboard
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/flights" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/flights' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-plane w-6"></i>
-                                        Manage Flights
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/bookings" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/bookings' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-ticket-alt w-6"></i>
-                                        All Bookings
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/users" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/admin/users' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-users w-6"></i>
-                                        Manage Users
-                                    </a>
-                                </li>
-                            <% } else { %>
-                                <li>
-                                    <a href="/dashboard" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/dashboard' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-chart-line w-6"></i>
-                                        Dashboard
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/flights" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/flights' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-plane w-6"></i>
-                                        Book Flights
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/bookings" 
-                                       class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/bookings' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                        <i class="fas fa-ticket-alt w-6"></i>
-                                        My Bookings
-                                    </a>
-                                </li>
-                            <% } %>
-                            <!-- Profile Section -->
-                            <li class="mt-4 pt-4 border-t border-gray-100">
-                                <a href="/profile" 
-                                   class="flex items-center hover:bg-red-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4 <%= typeof path !== 'undefined' && path === '/profile' ? 'bg-red-500 text-white hover:bg-red-600' : '' %>">
-                                    <i class="fas fa-user-circle w-6"></i>
-                                    Profile
-                                </a>
-                            </li>
-                        </ul>
+        <aside class="fixed inset-y-0 left-0 bg-white shadow-lg max-h-screen w-64">
+            <!-- Logo and Brand -->
+            <div class="flex flex-col h-full">
+                <div class="px-4 py-6 border-b border-gray-200">
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-plane-departure text-2xl text-red-600 mr-2"></i>
+                        <h1 class="text-xl font-bold text-gray-900">SkyBooker</h1>
                     </div>
                 </div>
-                <div class="p-4 border-t border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex-shrink-0">
-                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                                    <i class="fas fa-user text-red-500"></i>
-                                </div>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate">
-                                    <%= user.name %>
-                                </p>
-                                <p class="text-xs text-gray-500 truncate">
-                                    <%= user.email %>
-                                </p>
-                            </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 py-4 bg-white space-y-1 overflow-y-auto">
+                    <!-- User Profile Summary -->
+                    <div class="flex items-center space-x-3 mb-6 px-2 py-3 rounded-lg bg-gray-50">
+                        <img src="https://ui-avatars.com/api/?name=<%= user.name %>&background=random" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate"><%= user.name %></p>
+                            <p class="text-xs text-gray-500 truncate"><%= user.email %></p>
                         </div>
-                        <button id="logoutBtn" class="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
                     </div>
+
+                    <% if (user.role === 'admin') { %>
+                        <!-- Admin Navigation -->
+                        <div class="space-y-1">
+                            <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Admin Panel</p>
+                            <a href="/admin/dashboard" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/admin/dashboard' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-chart-line w-5 h-5 mr-3 text-indigo-500 group-hover:text-indigo-600"></i>
+                                Dashboard
+                            </a>
+                            <a href="/admin/flights" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/admin/flights' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-plane w-5 h-5 mr-3 text-blue-500 group-hover:text-blue-600"></i>
+                                Manage Flights
+                            </a>
+                            <a href="/admin/bookings" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/admin/bookings' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-ticket-alt w-5 h-5 mr-3 text-purple-500 group-hover:text-purple-600"></i>
+                                All Bookings
+                            </a>
+                            <a href="/admin/users" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/admin/users' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-users w-5 h-5 mr-3 text-green-500 group-hover:text-green-600"></i>
+                                Manage Users
+                            </a>
+                        </div>
+                    <% } else { %>
+                        <!-- User Navigation -->
+                        <div class="space-y-1">
+                            <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Main Menu</p>
+                            <a href="/dashboard" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/dashboard' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-home w-5 h-5 mr-3 text-blue-500 group-hover:text-blue-600"></i>
+                                Dashboard
+                            </a>
+                            <a href="/flights" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/flights' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-search w-5 h-5 mr-3 text-indigo-500 group-hover:text-indigo-600"></i>
+                                Search Flights
+                            </a>
+                            <a href="/bookings" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/bookings' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-ticket-alt w-5 h-5 mr-3 text-purple-500 group-hover:text-purple-600"></i>
+                                My Bookings
+                            </a>
+                        </div>
+
+                        <div class="space-y-1 mt-8">
+                            <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</p>
+                            <a href="/profile" 
+                               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg <%= typeof path !== 'undefined' && path === '/profile' ? 'text-red-700 bg-red-50' : 'text-gray-900 hover:bg-gray-100' %>">
+                                <i class="fas fa-user w-5 h-5 mr-3 text-green-500 group-hover:text-green-600"></i>
+                                Profile Settings
+                            </a>
+                        </div>
+                    <% } %>
+                </nav>
+
+                <!-- Bottom Actions -->
+                <div class="p-4 border-t border-gray-200">
+                    <a href="/logout" 
+                       class="group flex items-center justify-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100">
+                        <i class="fas fa-sign-out-alt w-5 h-5 mr-2 group-hover:text-red-700"></i>
+                        Sign Out
+                    </a>
                 </div>
             </div>
         </aside>
@@ -115,25 +105,6 @@
         <main class="ml-64 p-8">
             <%- body %>
         </main>
-
-        <script>
-            document.getElementById('logoutBtn').addEventListener('click', async () => {
-                try {
-                    const response = await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        credentials: 'same-origin'
-                    });
-
-                    if (response.ok) {
-                        window.location.href = '/login';
-                    } else {
-                        console.error('Logout failed');
-                    }
-                } catch (error) {
-                    console.error('Logout error:', error);
-                }
-            });
-        </script>
     <% } else { %>
         <!-- Public pages -->
         <%- body %>

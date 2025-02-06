@@ -25,7 +25,7 @@
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Revenue -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="bg-white overflow-hidden shadow rounded-lg transform transition-all duration-300 hover:scale-105">
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
@@ -34,8 +34,16 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900">$<%= stats.revenue.totalRevenue.toLocaleString() %></dd>
-                                    <dd class="text-sm text-gray-500">Avg. $<%= Math.round(stats.revenue.averageBookingValue).toLocaleString() %> per booking</dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="totalRevenue">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-8 w-24 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
+                                    <dd class="text-sm text-gray-500" id="avgRevenue">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-4 w-32 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
                                 </dl>
                             </div>
                         </div>
@@ -43,7 +51,7 @@
                 </div>
 
                 <!-- Total Bookings -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="bg-white overflow-hidden shadow rounded-lg transform transition-all duration-300 hover:scale-105">
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
@@ -52,8 +60,16 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Bookings</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900"><%= stats.bookings.totalBookings.toLocaleString() %></dd>
-                                    <dd class="text-sm text-gray-500"><%= stats.bookings.confirmedBookings.toLocaleString() %> confirmed</dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="totalBookings">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-8 w-20 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
+                                    <dd class="text-sm text-gray-500" id="confirmedBookings">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-4 w-28 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
                                 </dl>
                             </div>
                         </div>
@@ -61,7 +77,7 @@
                 </div>
 
                 <!-- Active Flights -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="bg-white overflow-hidden shadow rounded-lg transform transition-all duration-300 hover:scale-105">
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
@@ -70,8 +86,16 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Active Flights</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900"><%= stats.flights.activeFlights.toLocaleString() %></dd>
-                                    <dd class="text-sm text-gray-500">Out of <%= stats.flights.totalFlights.toLocaleString() %> total</dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="activeFlights">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-8 w-16 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
+                                    <dd class="text-sm text-gray-500" id="totalFlights">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-4 w-32 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
                                 </dl>
                             </div>
                         </div>
@@ -79,7 +103,7 @@
                 </div>
 
                 <!-- Total Users -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="bg-white overflow-hidden shadow rounded-lg transform transition-all duration-300 hover:scale-105">
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
@@ -88,8 +112,16 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
-                                    <dd class="text-2xl font-semibold text-gray-900"><%= stats.users.totalUsers.toLocaleString() %></dd>
-                                    <dd class="text-sm text-gray-500"><%= stats.users.activeUsers.toLocaleString() %> active</dd>
+                                    <dd class="text-2xl font-semibold text-gray-900" id="totalUsers">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-8 w-20 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
+                                    <dd class="text-sm text-gray-500" id="activeUsers">
+                                        <div class="animate-pulse flex space-x-4">
+                                            <div class="h-4 w-28 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </dd>
                                 </dl>
                             </div>
                         </div>
@@ -100,48 +132,52 @@
             <!-- Charts Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Revenue Chart -->
-                <div class="bg-white shadow rounded-lg p-6">
+                <div class="bg-white shadow rounded-lg p-6 transform transition-all duration-300 hover:scale-105">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Revenue Overview</h3>
-                    <div id="revenueChart" class="h-80"></div>
+                    <div id="revenueChart" class="h-80">
+                        <div class="animate-pulse flex flex-col space-y-4 h-full">
+                            <div class="h-2 bg-gray-200 rounded w-1/4"></div>
+                            <div class="space-y-3 flex-grow">
+                                <div class="h-40 bg-gray-200 rounded"></div>
+                                <div class="h-24 bg-gray-200 rounded"></div>
+                                <div class="h-32 bg-gray-200 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Bookings Chart -->
-                <div class="bg-white shadow rounded-lg p-6">
+                <div class="bg-white shadow rounded-lg p-6 transform transition-all duration-300 hover:scale-105">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Booking Trends</h3>
-                    <div id="bookingsChart" class="h-80"></div>
+                    <div id="bookingsChart" class="h-80">
+                        <div class="animate-pulse flex flex-col space-y-4 h-full">
+                            <div class="h-2 bg-gray-200 rounded w-1/4"></div>
+                            <div class="space-y-3 flex-grow">
+                                <div class="h-24 bg-gray-200 rounded"></div>
+                                <div class="h-32 bg-gray-200 rounded"></div>
+                                <div class="h-28 bg-gray-200 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Recent Activity -->
             <div class="mt-8">
-                <div class="bg-white shadow rounded-lg">
+                <div class="bg-white shadow rounded-lg transform transition-all duration-300 hover:scale-[1.02]">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
                     </div>
                     <div class="bg-gray-50 px-6 py-4">
                         <div class="flow-root">
-                            <ul class="-mb-8">
+                            <ul class="-mb-8" id="recentActivity">
                                 <li>
-                                    <div class="relative pb-8">
-                                        <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></span>
-                                        <div class="relative flex space-x-3">
-                                            <div>
-                                                <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
-                                                    <i class="fas fa-ticket-alt text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                <div>
-                                                    <p class="text-sm text-gray-500">New booking <span class="font-medium text-gray-900">#12345</span> by John Doe</p>
-                                                </div>
-                                                <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                    <time>2 hours ago</time>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="animate-pulse space-y-4 pb-8">
+                                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                                        <div class="h-4 bg-gray-200 rounded w-5/6"></div>
                                     </div>
                                 </li>
-                                <!-- Add more activity items as needed -->
                             </ul>
                         </div>
                     </div>
@@ -154,21 +190,37 @@
 <!-- ApexCharts -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    // Revenue Chart
-    var revenueOptions = {
+let revenueChart, bookingsChart;
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeCharts();
+    fetchDashboardData();
+    // Set up real-time updates every 15 seconds
+    setInterval(fetchDashboardData, 15000);
+});
+
+function initializeCharts() {
+    // Revenue Chart Configuration
+    const revenueOptions = {
         chart: {
             type: 'area',
             height: 320,
             toolbar: { show: false },
-            fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
+            }
         },
-        series: [{
-            name: 'Revenue',
-            data: [30000, 40000, 35000, 50000, 49000, 60000, 70000]
-        }],
-        xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
-        },
+        series: [{ name: 'Revenue', data: [] }],
         colors: ['#EF4444'],
         fill: {
             type: 'gradient',
@@ -179,50 +231,192 @@
                 stops: [0, 90, 100]
             }
         },
-        stroke: {
-            curve: 'smooth',
-            width: 2
+        stroke: { curve: 'smooth', width: 2 },
+        xaxis: {
+            type: 'datetime',
+            labels: { style: { colors: '#64748B' } }
+        },
+        yaxis: {
+            labels: {
+                style: { colors: '#64748B' },
+                formatter: (value) => formatCurrency(value)
+            }
         },
         tooltip: {
             theme: 'light',
             y: {
-                formatter: function(value) {
-                    return '$' + value.toLocaleString();
-                }
+                formatter: (value) => formatCurrency(value)
             }
         }
     };
 
-    var revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
-    revenueChart.render();
-
-    // Bookings Chart
-    var bookingsOptions = {
+    // Bookings Chart Configuration
+    const bookingsOptions = {
         chart: {
             type: 'bar',
             height: 320,
             toolbar: { show: false },
-            fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
+            }
         },
-        series: [{
-            name: 'Bookings',
-            data: [44, 55, 57, 56, 61, 58, 63]
-        }],
-        xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
-        },
+        series: [{ name: 'Bookings', data: [] }],
         colors: ['#EF4444'],
         plotOptions: {
             bar: {
-                borderRadius: 4,
-                columnWidth: '60%'
+                borderRadius: 8,
+                columnWidth: '60%',
+                dataLabels: {
+                    position: 'top'
+                }
             }
         },
+        xaxis: {
+            type: 'datetime',
+            labels: { style: { colors: '#64748B' } }
+        },
+        yaxis: { labels: { style: { colors: '#64748B' } } },
         tooltip: {
             theme: 'light'
         }
     };
 
-    var bookingsChart = new ApexCharts(document.querySelector("#bookingsChart"), bookingsOptions);
+    revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
+    bookingsChart = new ApexCharts(document.querySelector("#bookingsChart"), bookingsOptions);
+    
+    revenueChart.render();
     bookingsChart.render();
+}
+
+async function fetchDashboardData() {
+    try {
+        const response = await fetch('/api/admin/dashboard/stats');
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Update stats with smooth transitions
+            updateStatWithAnimation('totalRevenue', formatCurrency(data.revenue.totalRevenue));
+            updateStatWithAnimation('avgRevenue', `Avg. ${formatCurrency(data.revenue.averageBookingValue)} per booking`);
+            updateStatWithAnimation('totalBookings', data.bookings.totalBookings.toLocaleString());
+            updateStatWithAnimation('confirmedBookings', `${data.bookings.confirmedBookings.toLocaleString()} confirmed`);
+            updateStatWithAnimation('activeFlights', data.flights.activeFlights.toLocaleString());
+            updateStatWithAnimation('totalFlights', `Out of ${data.flights.totalFlights.toLocaleString()} total`);
+            updateStatWithAnimation('totalUsers', data.users.totalUsers.toLocaleString());
+            updateStatWithAnimation('activeUsers', `${data.users.activeUsers.toLocaleString()} active`);
+            
+            // Update charts
+            updateCharts(data.bookingTrends, data.revenueTrends);
+            
+            // Update recent activity
+            updateRecentActivityWithAnimation(data.recentActivity);
+        } else {
+            throw new Error(data.message || 'Failed to fetch dashboard data');
+        }
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        showToast('Failed to load dashboard data. Please try again later.', 'error');
+    }
+}
+
+function formatCurrency(value) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(value);
+}
+
+function updateStatWithAnimation(elementId, newValue) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    // Remove loading animation if present
+    const loadingDiv = element.querySelector('.animate-pulse');
+    if (loadingDiv) {
+        element.innerHTML = newValue;
+        return;
+    }
+
+    // Add transition effect
+    element.style.transition = 'opacity 0.3s ease-in-out';
+    element.style.opacity = '0';
+    
+    setTimeout(() => {
+        element.innerHTML = newValue;
+        element.style.opacity = '1';
+    }, 300);
+}
+
+function updateCharts(bookingTrends, revenueTrends) {
+    const bookingsData = bookingTrends.map(item => ({
+        x: new Date(item.date).getTime(),
+        y: item.count
+    }));
+
+    const revenueData = revenueTrends.map(item => ({
+        x: new Date(item.date).getTime(),
+        y: item.amount
+    }));
+
+    bookingsChart.updateSeries([{
+        name: 'Bookings',
+        data: bookingsData
+    }]);
+
+    revenueChart.updateSeries([{
+        name: 'Revenue',
+        data: revenueData
+    }]);
+}
+
+function updateRecentActivityWithAnimation(activities) {
+    const container = document.getElementById('recentActivity');
+    if (!container) return;
+
+    // Fade out
+    container.style.transition = 'opacity 0.3s ease-in-out';
+    container.style.opacity = '0';
+
+    setTimeout(() => {
+        if (!activities || activities.length === 0) {
+            container.innerHTML = `
+                <li>
+                    <div class="relative pb-8">
+                        <p class="text-sm text-gray-500 text-center">No recent activity</p>
+                    </div>
+                </li>
+            `;
+        } else {
+            container.innerHTML = activities.map(activity => `
+                <li>
+                    <div class="relative pb-8">
+                        <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></span>
+                        <div class="relative flex space-x-3">
+                            <div>
+                                <span class="h-8 w-8 rounded-full ${activity.iconBg} flex items-center justify-center ring-8 ring-white">
+                                    <i class="fas ${activity.icon} text-white"></i>
+                                </span>
+                            </div>
+                            <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">${activity.message}</p>
+                                </div>
+                                <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                    <time>${activity.timeAgo}</time>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `).join('');
+        }
+        // Fade in
+        container.style.opacity = '1';
+    }, 300);
+}
 </script>
